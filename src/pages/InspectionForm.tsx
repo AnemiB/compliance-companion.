@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, ArrowRight, Save, Check, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import dolLogo from '@/assets/dol-logo.png';
+import DocumentActions, { type Attachment } from '@/components/DocumentActions';
 
 const steps = [
   'Business Information',
@@ -135,6 +136,14 @@ const InspectionForm = () => {
     });
   };
 
+  const getStepAttachments = (stepNum: number): Attachment[] => {
+    return (inspection.attachments?.[stepNum] ?? []) as Attachment[];
+  };
+
+  const setStepAttachments = (stepNum: number, atts: Attachment[]) => {
+    update({ attachments: { ...inspection.attachments, [stepNum]: atts } });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-primary px-4 py-3">
@@ -182,6 +191,7 @@ const InspectionForm = () => {
                 <div><Label>Contact Email</Label><Input disabled={isSigned} value={inspection.businessInfo.contactEmail} onChange={e => update({ businessInfo: { ...inspection.businessInfo, contactEmail: e.target.value } })} /></div>
                 <div><Label>Company Address</Label><Input disabled={isSigned} value={inspection.businessInfo.address} onChange={e => update({ businessInfo: { ...inspection.businessInfo, address: e.target.value } })} /></div>
               </div>
+              <DocumentActions attachments={getStepAttachments(1)} onAttachmentsChange={atts => setStepAttachments(1, atts)} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -219,6 +229,7 @@ const InspectionForm = () => {
                 </div>
               ))}
               {inspection.employeeInfo.employees.length === 0 && <p className="text-sm text-muted-foreground">No employees added. Click "Add Employee" to begin.</p>}
+              <DocumentActions attachments={getStepAttachments(2)} onAttachmentsChange={atts => setStepAttachments(2, atts)} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -245,6 +256,7 @@ const InspectionForm = () => {
               </div>
               <div><Label>Last Submission Date</Label><Input type="date" disabled={isSigned} value={inspection.taxInfo.lastSubmissionDate} onChange={e => update({ taxInfo: { ...inspection.taxInfo, lastSubmissionDate: e.target.value } })} /></div>
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.taxInfo.notes} onChange={e => update({ taxInfo: { ...inspection.taxInfo, notes: e.target.value } })} /></div>
+              <DocumentActions attachments={getStepAttachments(3)} onAttachmentsChange={atts => setStepAttachments(3, atts)} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -263,6 +275,7 @@ const InspectionForm = () => {
                 </div>
               ))}
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.complianceStatuses.notes} onChange={e => update({ complianceStatuses: { ...inspection.complianceStatuses, notes: e.target.value } })} /></div>
+              <DocumentActions attachments={getStepAttachments(4)} onAttachmentsChange={atts => setStepAttachments(4, atts)} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -296,6 +309,7 @@ const InspectionForm = () => {
                 ))}
               </div>
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.ohsCompliance.notes} onChange={e => update({ ohsCompliance: { ...inspection.ohsCompliance, notes: e.target.value } })} /></div>
+              <DocumentActions attachments={getStepAttachments(5)} onAttachmentsChange={atts => setStepAttachments(5, atts)} disabled={isSigned} />
 
               {/* Signature */}
               <div className="mt-6 border-t pt-4">
