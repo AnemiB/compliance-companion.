@@ -18,7 +18,7 @@ const LoginPage = () => {
     if (!email || !password) return;
     const user = login(email, password, role);
     if (user) {
-      navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+      navigate(user.role === 'admin' ? '/admin' : '/inspector/dashboard');
     }
   };
 
