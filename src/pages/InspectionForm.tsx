@@ -136,7 +136,13 @@ const InspectionForm = () => {
     });
   };
 
-  return (
+  const getStepAttachments = (stepNum: number): Attachment[] => {
+    return (inspection.attachments?.[stepNum] ?? []) as Attachment[];
+  };
+
+  const setStepAttachments = (stepNum: number, atts: Attachment[]) => {
+    update({ attachments: { ...inspection.attachments, [stepNum]: atts } });
+  };
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-primary px-4 py-3">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
