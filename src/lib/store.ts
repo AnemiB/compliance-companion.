@@ -46,6 +46,17 @@ export interface OHSCompliance {
   notes: string;
 }
 
+export interface StepAttachments {
+  [step: number]: Array<{
+    id: string;
+    name: string;
+    type: string;
+    dataUrl: string;
+    addedAt: string;
+    source: 'upload' | 'scan' | 'qr';
+  }>;
+}
+
 export interface Inspection {
   id: string;
   companyId: string;
@@ -57,6 +68,7 @@ export interface Inspection {
   updatedAt: string;
   signedAt?: string;
   signature?: string;
+  attachments?: StepAttachments;
   businessInfo: {
     companyName: string;
     registrationNumber: string;

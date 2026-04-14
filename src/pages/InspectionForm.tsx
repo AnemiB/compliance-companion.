@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, ArrowRight, Save, Check, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import dolLogo from '@/assets/dol-logo.png';
+import DocumentActions, { type Attachment } from '@/components/DocumentActions';
 
 const steps = [
   'Business Information',
