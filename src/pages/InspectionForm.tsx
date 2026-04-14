@@ -308,6 +308,7 @@ const InspectionForm = () => {
                   </div>
                 ))}
               </div>
+              <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.ohsCompliance.notes} onChange={e => update({ ohsCompliance: { ...inspection.ohsCompliance, notes: e.target.value } })} /></div>
               <DocumentActions attachments={getStepAttachments(5)} onAttachmentsChange={atts => setStepAttachments(5, atts)} disabled={isSigned} />
 
               {/* Signature */}
