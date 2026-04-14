@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Shield } from 'lucide-react';
-import dolLogo from '@/assets/dol-logo.jpg';
+import dolLogo from '@/assets/dol-logo.png';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
