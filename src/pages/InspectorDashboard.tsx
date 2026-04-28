@@ -44,7 +44,7 @@ const InspectorDashboard = () => {
 
   const handleAddCompany = () => {
     if (!newCompany.name) return;
-    const company = addCompany(newCompany);
+    const company = addCompany({ ...newCompany, companyType: 'pty-ltd', ownerType: 'south-african', province: 'Gauteng', industry: 'Other', employeeCount: 0, complianceScore: 70 });
     setNewCompany({ name: '', registrationNumber: '', ownerName: '', contactPhone: '', contactEmail: '', address: '' });
     setShowAddCompany(false);
     handleStartInspection(company);
