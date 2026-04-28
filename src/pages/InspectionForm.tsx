@@ -197,6 +197,7 @@ const InspectionForm = () => {
                 <div><Label>Company Address</Label><Input disabled={isSigned} value={inspection.businessInfo.address} onChange={e => update({ businessInfo: { ...inspection.businessInfo, address: e.target.value } })} /></div>
               </div>
               <DocumentActions attachments={getStepAttachments(1)} onAttachmentsChange={atts => setStepAttachments(1, atts)} disabled={isSigned} />
+              <StepRecorder step={1} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -283,6 +284,7 @@ const InspectionForm = () => {
               ))}
               {inspection.employeeInfo.employees.length === 0 && <p className="text-sm text-muted-foreground">No employees added. Click "Add Employee" to begin.</p>}
               <DocumentActions attachments={getStepAttachments(2)} onAttachmentsChange={atts => setStepAttachments(2, atts)} disabled={isSigned} />
+              <StepRecorder step={2} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -310,6 +312,7 @@ const InspectionForm = () => {
               <div><Label>Last Submission Date</Label><Input type="date" disabled={isSigned} value={inspection.taxInfo.lastSubmissionDate} onChange={e => update({ taxInfo: { ...inspection.taxInfo, lastSubmissionDate: e.target.value } })} /></div>
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.taxInfo.notes} onChange={e => update({ taxInfo: { ...inspection.taxInfo, notes: e.target.value } })} /></div>
               <DocumentActions attachments={getStepAttachments(3)} onAttachmentsChange={atts => setStepAttachments(3, atts)} disabled={isSigned} />
+              <StepRecorder step={3} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -329,6 +332,7 @@ const InspectionForm = () => {
               ))}
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.complianceStatuses.notes} onChange={e => update({ complianceStatuses: { ...inspection.complianceStatuses, notes: e.target.value } })} /></div>
               <DocumentActions attachments={getStepAttachments(4)} onAttachmentsChange={atts => setStepAttachments(4, atts)} disabled={isSigned} />
+              <StepRecorder step={4} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -363,6 +367,7 @@ const InspectionForm = () => {
               </div>
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.ohsCompliance.notes} onChange={e => update({ ohsCompliance: { ...inspection.ohsCompliance, notes: e.target.value } })} /></div>
               <DocumentActions attachments={getStepAttachments(5)} onAttachmentsChange={atts => setStepAttachments(5, atts)} disabled={isSigned} />
+              <StepRecorder step={5} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
 
               {/* Signature */}
               <div className="mt-6 border-t pt-4">
