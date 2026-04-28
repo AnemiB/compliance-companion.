@@ -12,6 +12,8 @@ import { ArrowLeft, ArrowRight, Save, Check, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import dolLogo from '@/assets/dol-logo.png';
 import DocumentActions, { type Attachment } from '@/components/DocumentActions';
+import StepRecorder from '@/components/StepRecorder';
+import type { AudioRecording } from '@/lib/store';
 
 const steps = [
   'Business Information',
@@ -144,6 +146,9 @@ const InspectionForm = () => {
     update({ attachments: { ...inspection.attachments, [stepNum]: atts } });
   };
 
+  const recordings = inspection.recordings ?? [];
+  const setRecordings = (recs: AudioRecording[]) => update({ recordings: recs });
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-primary px-4 py-3">
@@ -192,6 +197,7 @@ const InspectionForm = () => {
                 <div><Label>Company Address</Label><Input disabled={isSigned} value={inspection.businessInfo.address} onChange={e => update({ businessInfo: { ...inspection.businessInfo, address: e.target.value } })} /></div>
               </div>
               <DocumentActions attachments={getStepAttachments(1)} onAttachmentsChange={atts => setStepAttachments(1, atts)} disabled={isSigned} />
+              <StepRecorder step={1} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -278,6 +284,7 @@ const InspectionForm = () => {
               ))}
               {inspection.employeeInfo.employees.length === 0 && <p className="text-sm text-muted-foreground">No employees added. Click "Add Employee" to begin.</p>}
               <DocumentActions attachments={getStepAttachments(2)} onAttachmentsChange={atts => setStepAttachments(2, atts)} disabled={isSigned} />
+              <StepRecorder step={2} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -305,6 +312,7 @@ const InspectionForm = () => {
               <div><Label>Last Submission Date</Label><Input type="date" disabled={isSigned} value={inspection.taxInfo.lastSubmissionDate} onChange={e => update({ taxInfo: { ...inspection.taxInfo, lastSubmissionDate: e.target.value } })} /></div>
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.taxInfo.notes} onChange={e => update({ taxInfo: { ...inspection.taxInfo, notes: e.target.value } })} /></div>
               <DocumentActions attachments={getStepAttachments(3)} onAttachmentsChange={atts => setStepAttachments(3, atts)} disabled={isSigned} />
+              <StepRecorder step={3} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -324,6 +332,7 @@ const InspectionForm = () => {
               ))}
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.complianceStatuses.notes} onChange={e => update({ complianceStatuses: { ...inspection.complianceStatuses, notes: e.target.value } })} /></div>
               <DocumentActions attachments={getStepAttachments(4)} onAttachmentsChange={atts => setStepAttachments(4, atts)} disabled={isSigned} />
+              <StepRecorder step={4} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
             </CardContent>
           </Card>
         )}
@@ -358,6 +367,7 @@ const InspectionForm = () => {
               </div>
               <div><Label>Notes</Label><Textarea disabled={isSigned} value={inspection.ohsCompliance.notes} onChange={e => update({ ohsCompliance: { ...inspection.ohsCompliance, notes: e.target.value } })} /></div>
               <DocumentActions attachments={getStepAttachments(5)} onAttachmentsChange={atts => setStepAttachments(5, atts)} disabled={isSigned} />
+              <StepRecorder step={5} recordings={recordings} onChange={setRecordings} disabled={isSigned} />
 
               {/* Signature */}
               <div className="mt-6 border-t pt-4">
@@ -377,6 +387,24 @@ const InspectionForm = () => {
                   </div>
                 )}
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Recordings summary across all steps */}
+        {recordings.length > 0 && (
+          <Card className="mt-6">
+            <CardHeader><CardTitle className="text-base">All Audit Recordings ({recordings.length})</CardTitle></CardHeader>
+            <CardContent className="space-y-2">
+              {recordings.map(r => (
+                <div key={r.id} className="rounded border p-2 text-xs">
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Step {r.step} — {steps[r.step - 1]}</span>
+                    <span>{new Date(r.createdAt).toLocaleString()} • {Math.floor(r.durationSec / 60)}:{(r.durationSec % 60).toString().padStart(2, '0')}</span>
+                  </div>
+                  {r.transcript && <p className="mt-1 whitespace-pre-wrap">{r.transcript}</p>}
+                </div>
+              ))}
             </CardContent>
           </Card>
         )}
