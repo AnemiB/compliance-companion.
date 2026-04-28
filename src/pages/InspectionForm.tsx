@@ -12,6 +12,8 @@ import { ArrowLeft, ArrowRight, Save, Check, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import dolLogo from '@/assets/dol-logo.png';
 import DocumentActions, { type Attachment } from '@/components/DocumentActions';
+import StepRecorder from '@/components/StepRecorder';
+import type { AudioRecording } from '@/lib/store';
 
 const steps = [
   'Business Information',
@@ -143,6 +145,9 @@ const InspectionForm = () => {
   const setStepAttachments = (stepNum: number, atts: Attachment[]) => {
     update({ attachments: { ...inspection.attachments, [stepNum]: atts } });
   };
+
+  const recordings = inspection.recordings ?? [];
+  const setRecordings = (recs: AudioRecording[]) => update({ recordings: recs });
 
   return (
     <div className="min-h-screen bg-background">
