@@ -391,6 +391,24 @@ const InspectionForm = () => {
           </Card>
         )}
 
+        {/* Recordings summary across all steps */}
+        {recordings.length > 0 && (
+          <Card className="mt-6">
+            <CardHeader><CardTitle className="text-base">All Audit Recordings ({recordings.length})</CardTitle></CardHeader>
+            <CardContent className="space-y-2">
+              {recordings.map(r => (
+                <div key={r.id} className="rounded border p-2 text-xs">
+                  <div className="flex items-center justify-between text-muted-foreground">
+                    <span>Step {r.step} — {steps[r.step - 1]}</span>
+                    <span>{new Date(r.createdAt).toLocaleString()} • {Math.floor(r.durationSec / 60)}:{(r.durationSec % 60).toString().padStart(2, '0')}</span>
+                  </div>
+                  {r.transcript && <p className="mt-1 whitespace-pre-wrap">{r.transcript}</p>}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
         {/* Navigation */}
         <div className="mt-6 flex justify-between">
           <Button variant="outline" onClick={handlePrev} disabled={step === 1}><ArrowLeft className="mr-1 h-4 w-4" /> Previous</Button>
