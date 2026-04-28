@@ -127,7 +127,7 @@ const InspectionForm = () => {
     update({ employeeInfo: { ...inspection.employeeInfo, employees: inspection.employeeInfo.employees.filter(e => e.id !== empId) } });
   };
 
-  const updateEmployee = (empId: string, field: keyof Employee, value: string) => {
+  const updateEmployee = (empId: string, field: keyof Employee, value: any) => {
     update({
       employeeInfo: {
         ...inspection.employeeInfo,
