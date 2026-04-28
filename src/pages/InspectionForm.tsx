@@ -208,9 +208,9 @@ const InspectionForm = () => {
             <CardContent className="space-y-4">
               <div><Label>Total Number of Employees</Label><Input type="number" disabled={isSigned} value={inspection.employeeInfo.totalEmployees} onChange={e => update({ employeeInfo: { ...inspection.employeeInfo, totalEmployees: parseInt(e.target.value) || 0 } })} /></div>
               {inspection.employeeInfo.employees.map((emp, idx) => (
-                <div key={emp.id} className="rounded-md border p-3 space-y-2">
+                <div key={emp.id} className="rounded-md border p-3 space-y-3 bg-muted/30">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Employee {idx + 1}</span>
+                    <span className="text-sm font-semibold">Employee {idx + 1}{emp.name ? ` — ${emp.name}` : ''}</span>
                     {!isSigned && <Button variant="ghost" size="sm" onClick={() => removeEmployee(emp.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>}
                   </div>
                   <div className="grid gap-3 md:grid-cols-3">
@@ -224,6 +224,54 @@ const InspectionForm = () => {
                         <option value="contract">Contract</option>
                         <option value="terminated">Terminated</option>
                       </select>
+                    </div>
+                  </div>
+                  <div className="grid gap-3 md:grid-cols-4">
+                    <div><Label>Age</Label><Input type="number" disabled={isSigned} value={emp.age ?? ''} onChange={e => updateEmployee(emp.id, 'age', e.target.value ? parseInt(e.target.value) as any : undefined as any)} /></div>
+                    <div><Label>ID Number</Label><Input disabled={isSigned} value={emp.idNumber ?? ''} onChange={e => updateEmployee(emp.id, 'idNumber', e.target.value)} /></div>
+                    <div><Label>Monthly Salary (R)</Label><Input type="number" disabled={isSigned} value={emp.monthlySalary ?? ''} onChange={e => updateEmployee(emp.id, 'monthlySalary', e.target.value ? parseFloat(e.target.value) as any : undefined as any)} /></div>
+                    <div>
+                      <Label>Contract Type</Label>
+                      <select disabled={isSigned} value={emp.contractType ?? 'none'} onChange={e => updateEmployee(emp.id, 'contractType', e.target.value)} className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                        <option value="none">— Select —</option>
+                        <option value="permanent">Permanent</option>
+                        <option value="fixed-term">Fixed Term</option>
+                        <option value="casual">Casual</option>
+                        <option value="learnership">Learnership</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="grid gap-3 md:grid-cols-4">
+                    <div><Label>Hours / Week</Label><Input type="number" disabled={isSigned} value={emp.hoursPerWeek ?? ''} onChange={e => updateEmployee(emp.id, 'hoursPerWeek', e.target.value ? parseFloat(e.target.value) as any : undefined as any)} /></div>
+                    <div><Label>Annual Leave (days)</Label><Input type="number" disabled={isSigned} value={emp.annualLeaveDays ?? ''} onChange={e => updateEmployee(emp.id, 'annualLeaveDays', e.target.value ? parseInt(e.target.value) as any : undefined as any)} /></div>
+                    <div className="flex items-center gap-2 pt-6"><Checkbox disabled={isSigned} checked={!!emp.uifRegistered} onCheckedChange={v => updateEmployee(emp.id, 'uifRegistered', !!v as any)} /><Label className="cursor-pointer">UIF Registered</Label></div>
+                    <div className="flex items-center gap-2 pt-6"><Checkbox disabled={isSigned} checked={!!emp.taxRegistered} onCheckedChange={v => updateEmployee(emp.id, 'taxRegistered', !!v as any)} /><Label className="cursor-pointer">Tax Registered</Label></div>
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs">Documents (ID, contract, payslip)</Label>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {(emp.attachments ?? []).map(att => (
+                        <Badge key={att.id} variant="outline" className="gap-1">
+                          {att.category}: {att.name}
+                          {!isSigned && <button onClick={() => updateEmployee(emp.id, 'attachments', (emp.attachments ?? []).filter(a => a.id !== att.id) as any)} className="ml-1 text-destructive">×</button>}
+                        </Badge>
+                      ))}
+                      {!isSigned && (
+                        <label className="cursor-pointer text-xs text-primary underline">
+                          + Upload
+                          <input type="file" className="hidden" onChange={e => {
+                            const file = e.target.files?.[0]; if (!file) return;
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                              const cat = (window.prompt('Category (id / contract / payslip / other)?', 'id') || 'other').toLowerCase();
+                              const category = (['id','contract','payslip','other'].includes(cat) ? cat : 'other') as 'id' | 'contract' | 'payslip' | 'other';
+                              const att = { id: Date.now().toString(), name: file.name, type: file.type, dataUrl: reader.result as string, category };
+                              updateEmployee(emp.id, 'attachments', [...(emp.attachments ?? []), att] as any);
+                            };
+                            reader.readAsDataURL(file);
+                          }} />
+                        </label>
+                      )}
                     </div>
                   </div>
                 </div>
